@@ -1,0 +1,35 @@
+{
+    "React component": {
+        "scope": "typescriptreact",
+        "prefix": "rc",
+        "body": [
+            "import React from 'react';",
+            "import { createUseStyles } from 'react-jss';",
+            "",
+            "type I${0:$TM_FILENAME_BASE}Props = {",
+            "}",
+            "",
+            "const ${0:$TM_FILENAME_BASE}: React.FC<I${0:$TM_FILENAME_BASE}Props> = ({}) => {",
+            "    const css = useStyles();",
+            "    return (",
+            "        <div className={css.container}>${0:$TM_FILENAME_BASE}</div>",
+            "    );",
+            "}",
+            "",
+            "export default ${0:$TM_FILENAME_BASE}",
+            "",
+            "const useStyles = createUseStyles({",
+            "    container: {",
+            "        ",
+            "    },",
+            "});",
+            ""
+        ],
+        "description": "create react component"
+    },
+    "useState": {
+        "scope": "typescript,typescriptreact",
+        "prefix": "us",
+        "body": "const [$1, set${1/(^.)(.*)/${1:/upcase}$2/}] = React.useState(${2|'',false|});"
+    }
+}
