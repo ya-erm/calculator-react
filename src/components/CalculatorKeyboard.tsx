@@ -1,10 +1,10 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
+import { ReactComponent as MultiplyIcon } from '../assets/icons/close.svg';
 import { ReactComponent as TrashIcon } from '../assets/icons/delete.svg';
 import { ReactComponent as DivideIcon } from '../assets/icons/division.svg';
 import { ReactComponent as EqualsIcon } from '../assets/icons/equal.svg';
 import { ReactComponent as MinusIcon } from '../assets/icons/minus.svg';
-import { ReactComponent as MultiplyIcon } from '../assets/icons/close.svg';
 import { ReactComponent as PlusIcon } from '../assets/icons/plus.svg';
 import { EVENT_EMITTER } from '../hooks/useEvents';
 import { ActionButton, CalculatorButton, IButtonProps } from './CalculatorButton';

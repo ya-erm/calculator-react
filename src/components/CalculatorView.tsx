@@ -1,10 +1,10 @@
-import React, { KeyboardEventHandler, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { createUseStyles } from 'react-jss';
+import { ReactComponent as BackspaceIcon } from '../assets/icons/backspace.svg';
+import { EVENT_EMITTER } from '../hooks/useEvents';
 import { ActionButton, BUTTON_FULL_SIZE } from './CalculatorButton';
 import CalculatorInput from './CalculatorInput';
 import CalculatorKeyboard from './CalculatorKeyboard';
-import { ReactComponent as BackspaceIcon } from '../assets/icons/backspace.svg';
-import { EVENT_EMITTER } from '../hooks/useEvents';
 
 type ICalculatorViewProps = {};
 
