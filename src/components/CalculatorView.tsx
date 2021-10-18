@@ -26,7 +26,11 @@ const CalculatorView: React.FC<ICalculatorViewProps> = () => {
                 <div className={css.calculatorInput}>
                     <CalculatorInput />
                     <div className={css.backspace}>
-                        <ActionButton text="Backspace" icon={<BackspaceIcon />} />
+                        <ActionButton
+                            text="Backspace"
+                            icon={<BackspaceIcon />}
+                            onPress={() => EVENT_EMITTER.emit('key', 'Backspace')}
+                        />
                     </div>
                 </div>
                 <CalculatorKeyboard />
