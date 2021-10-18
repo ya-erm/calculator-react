@@ -35,7 +35,7 @@ export const CalculatorButton: React.FC<IButtonProps> = ({
                 width: columns * size + (columns - 1) * 2 * BUTTON_MARGIN,
                 borderRadius: size,
             }}
-            onPointerDown={onPress}
+            onClick={onPress}
         >
             {icon ? icon : text}
         </button>
