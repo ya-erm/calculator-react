@@ -136,7 +136,7 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
     };
 
     const onKeyPress = (key: string) => {
-        if (('0' < key && key <= '9') || key === '(' || key === ')') {
+        if (('0' <= key && key <= '9') || key === '(' || key === ')') {
             numberAction(key);
         } else if (key === '.' || key === ',') {
             numberAction('.');
