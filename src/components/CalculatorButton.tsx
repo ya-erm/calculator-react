@@ -36,6 +36,7 @@ export const CalculatorButton: React.FC<IButtonProps> = ({
                 borderRadius: size,
             }}
             onClick={onPress}
+            aria-label={text}
         >
             {icon ? icon : text}
         </button>

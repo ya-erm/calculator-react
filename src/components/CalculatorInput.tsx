@@ -165,7 +165,7 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
                 evaluateAction();
             } else if (key === 'Backspace') {
                 deleteAction();
-            } else if (key === 'Clear') {
+            } else if (key === 'Clear' || key === 'C') {
                 clearAction();
             }
         },

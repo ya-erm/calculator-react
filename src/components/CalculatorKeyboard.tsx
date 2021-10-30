@@ -34,11 +34,7 @@ const CalculatorKeyboard: React.FC<ICalculatorKeyboardProps> = () => {
     return (
         <div className={css.container}>
             <Row>
-                <ActionButton
-                    text="Clear"
-                    icon={<TrashIcon />}
-                    onPress={() => onKeyPress('Clear')}
-                />
+                <ActionButton text="C" icon={<TrashIcon />} onPress={() => onKeyPress('C')} />
                 <NumberButton text="(" type="action" />
                 <NumberButton text=")" type="action" />
                 <FunctionButton text="/" icon={<DivideIcon />} />
@@ -64,7 +60,7 @@ const CalculatorKeyboard: React.FC<ICalculatorKeyboardProps> = () => {
             <Row>
                 <NumberButton text="0" columns={2} />
                 <NumberButton text="." />
-                <ActionButton text="=" onPress={() => onKeyPress('Enter')} icon={<EqualsIcon />} />
+                <ActionButton text="=" onPress={() => onKeyPress('=')} icon={<EqualsIcon />} />
             </Row>
         </div>
     );
