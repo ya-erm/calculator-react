@@ -128,11 +128,15 @@ const performOperation = (operationToken: CalculationToken, left: number, right:
     }
 };
 
-export const calculate = (expression: string) => {
+export const calculate = (expression: string, previous: number | null) => {
     try {
         let leftStack: CalculationToken[] = [];
         let rightStack = parse(expression);
         let accumulator: number | null = null;
+
+        if (previous) {
+            rightStack[0] = new CalculationToken('number', previous.toString());
+        }
 
         const scroll = () => {
             const accumulatedValue = accumulator;
@@ -202,3 +206,21 @@ export const calculate = (expression: string) => {
         return 'Error';
     }
 };
+
+export function roundTo(n: number, digits?: number) {
+    let negative = false;
+    if (digits === undefined) {
+        digits = 0;
+    }
+    if (n < 0) {
+        negative = true;
+        n = -1 * n;
+    }
+    let m = Math.pow(10, digits);
+    let r = parseFloat((n * m).toFixed(11));
+    r = Number((Math.round(r) / m).toFixed(digits));
+    if (negative) {
+        r = -1 * r;
+    }
+    return r;
+}

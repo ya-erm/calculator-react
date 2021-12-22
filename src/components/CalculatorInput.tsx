@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { EVENT_EMITTER } from '../hooks/useEvents';
-import { calculate } from '../model/Calculator';
+import { calculate, roundTo } from '../model/Calculator';
 
 type ICalculatorInputProps = {};
 
@@ -10,6 +10,7 @@ const nonRepeatingOperators = ['+', '-', '/', '*'];
 type ICalculatorState = {
     input: string;
     expression: string;
+    result: number | null;
 };
 
 const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
@@ -19,6 +20,7 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
     const [state, _setState] = React.useState<ICalculatorState>({
         input: '0',
         expression: '0',
+        result: null,
     });
     const setState = (action: (prev: ICalculatorState) => ICalculatorState) => {
         _setState((prev) => {
@@ -31,15 +33,25 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
     // const { input, expression } = state;
 
     const clearAction = useCallback(() => {
-        setState((prev) => ({ input: '0', expression: '0' }));
+        setState((prev) => ({ input: '0', expression: '0', result: null }));
     }, []);
 
     const numberAction = useCallback((number: string) => {
-        const inputValue = expressionRef.current.includes('=') ? '0' : inputRef.current;
-        const expressionValue = expressionRef.current.includes('=') ? '0' : expressionRef.current;
+        const hasResult = expressionRef.current.includes('=');
+        const inputValue = hasResult ? '0' : inputRef.current;
+        const expressionValue = hasResult ? '0' : expressionRef.current;
 
-        if (inputValue === '0') {
-            if (number === '.') {
+        if (number === '.') {
+            if (hasResult) {
+                setState((prev) => ({
+                    ...prev,
+                    input: '0.',
+                    expression: '0.',
+                    result: null,
+                }));
+                return;
+            }
+            if (inputValue === '0') {
                 // If expression ends with operator then append zero
                 const trimmedExpression = expressionValue.trimEnd();
                 if (
@@ -53,28 +65,40 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
                         expression: prev.expression + '0',
                     }));
                 }
-            } else {
+            } else if (inputValue === '-') {
+                setState((prev) => ({
+                    ...prev,
+                    input: prev.input + '0',
+                    expression: prev.expression + '0',
+                }));
+            }
+        } else {
+            if (inputValue === '0') {
                 // Replace zero by digit 1-9
                 setState((prev) => ({
+                    ...prev,
                     input: number,
                     expression: expressionValue === '0' ? number : prev.expression + number,
+                    result: hasResult ? null : prev.result,
                 }));
                 return;
             }
         }
+
         // Ignore duplicate decimal delimiter sign
         if (inputValue.includes('.') && number === '.') {
             return;
         }
 
         setState((prev) => ({
+            ...prev,
             input: prev.input + number,
             expression: prev.expression + number,
         }));
     }, []);
 
     const continueWithResult = useCallback(() => {
-        const values = expressionRef.current.split('=').map((x) => x.trimEnd());
+        const values = expressionRef.current.split('=').map((x) => x.trim());
         const value = values[values.length - 1] ?? '0';
         setState((prev) => ({ ...prev, expression: value }));
         return value;
@@ -103,7 +127,11 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
             }
 
             if (expressionValue === '0' && text === '-') {
-                setState((_) => ({ input: '-', expression: '-' }));
+                setState((prev) => ({
+                    ...prev,
+                    input: '-',
+                    expression: '-',
+                }));
                 return;
             }
 
@@ -111,13 +139,18 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
                 expressionValue = '0';
             }
 
-            setState((_) => ({ input: '0', expression: expressionValue + ` ${text} ` }));
+            setState((prev) => ({
+                ...prev,
+                input: '0',
+                expression: expressionValue + ` ${text} `,
+            }));
         },
         [continueWithResult],
     );
 
     const deleteAction = useCallback(() => {
         setState((prev) => ({
+            ...prev,
             input: prev.input.length > 1 ? prev.input.substring(0, prev.input.length - 1) : '0',
             expression:
                 prev.expression.length > 1
@@ -133,25 +166,27 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
         if (expressionRef.current.includes('=')) {
             return;
         }
-        // If expression ends with operator then append zero
-        let trimmedExpression = expressionRef.current.trimEnd();
+        // If expression ends with operator or dot then append zero
+        let trimmed = expressionRef.current.trimEnd();
         if (
-            trimmedExpression.length > 0 &&
-            nonRepeatingOperators.includes(trimmedExpression[trimmedExpression.length - 1])
+            trimmed.length > 0 &&
+            (nonRepeatingOperators.includes(trimmed[trimmed.length - 1]) || trimmed.endsWith('.'))
         ) {
             setState((prev) => ({
                 ...prev,
                 expression: prev.expression + '0',
             }));
         }
-        let result = calculate(expressionRef.current);
+        let result = calculate(expressionRef.current, state.result);
 
         setState((prev) => ({
             ...prev,
             input: `${result}`,
-            expression: prev.expression + ` = ${result}`,
+            expression:
+                prev.expression + ` = ${typeof result == 'number' ? roundTo(result, 10) : result}`,
+            result: typeof result == 'number' ? result : null,
         }));
-    }, []);
+    }, [state.result]);
 
     const onKeyPress = useCallback(
         (key: string) => {
@@ -177,12 +212,17 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
     }, [onKeyPress]);
 
     const css = useStyles();
+    const value = Number(state.input);
 
     return (
         <div className={css.container}>
-            <div className={css.inputMain}>{state.input}</div>
+            <div className={css.inputMain} aria-label="input">
+                {isNaN(value) || state.input.endsWith('.') ? state.input : roundTo(value, 10)}
+            </div>
             <div className={css.separator} />
-            <div className={css.history}>{state.expression}</div>
+            <div className={css.history} aria-label="history">
+                {state.expression}
+            </div>
         </div>
     );
 };
