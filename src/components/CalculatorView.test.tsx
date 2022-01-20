@@ -235,3 +235,18 @@ test('1.0 = 1, 2.0 = 2, etc', () => {
         press('C');
     });
 });
+
+test('5 * 5 = 25, then backspace all and 2 + 2 = 4', () => {
+    render(<CalculatorView />);
+    input('5 * 5 =');
+    check('25', '5 * 5 = 25');
+    // clear all
+    for (let i = 0; i < 6; i++) {
+        press('Backspace');
+    }
+    checkResult('0');
+    checkHistory('0');
+    // second input
+    input('2 + 2 =');
+    check('4', '2 + 2 = 4');
+});

@@ -159,6 +159,7 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
                           .substring(0, prev.expression.trimEnd().length - 1)
                           .trimEnd()
                     : '0',
+            result: null,
         }));
     }, []);
 
