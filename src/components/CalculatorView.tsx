@@ -3,7 +3,7 @@ import { createUseStyles } from 'react-jss';
 import { ReactComponent as BackspaceIcon } from '../assets/icons/backspace.svg';
 import { EVENT_EMITTER } from '../hooks/useEvents';
 import { ActionButton, BUTTON_FULL_SIZE } from './CalculatorButton';
-import CalculatorInput from './CalculatorInput';
+import CalculatorHeader from './CalculatorHeader';
 import CalculatorKeyboard from './CalculatorKeyboard';
 
 type ICalculatorViewProps = {};
@@ -18,13 +18,16 @@ const CalculatorView: React.FC<ICalculatorViewProps> = () => {
 
         // Keyboard input
         window.addEventListener('keydown', (e: KeyboardEvent) => EVENT_EMITTER.emit('key', e.key));
+
+        // Clear at render
+        EVENT_EMITTER.emit('key', 'Clear');
     }, []);
 
     return (
         <div className={css.container}>
             <div style={{ width: Math.min(4 * BUTTON_FULL_SIZE, windowSize) }}>
                 <div className={css.calculatorInput}>
-                    <CalculatorInput />
+                    <CalculatorHeader />
                     <div className={css.backspace}>
                         <ActionButton
                             text="Backspace"

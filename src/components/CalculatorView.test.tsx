@@ -236,6 +236,22 @@ test('1.0 = 1, 2.0 = 2, etc', () => {
     });
 });
 
+test('Backspace delete last symbol at input', () => {
+    render(<CalculatorView />);
+    input('123');
+    press('Backspace');
+    checkResult('12');
+});
+
+test('Backspace delete last symbol at history', () => {
+    render(<CalculatorView />);
+    input('2 + 2 =');
+    check('4', '2 + 2 = 4');
+    press('Backspace');
+    checkResult('0');
+    checkHistory('2 + 2 =');
+});
+
 test('5 * 5 = 25, then backspace all and 2 + 2 = 4', () => {
     render(<CalculatorView />);
     input('5 * 5 =');
@@ -249,4 +265,12 @@ test('5 * 5 = 25, then backspace all and 2 + 2 = 4', () => {
     // second input
     input('2 + 2 =');
     check('4', '2 + 2 = 4');
+});
+
+test('0.000 should display as 0.000 during input 0.0005', () => {
+    render(<CalculatorView />);
+    input('0.000');
+    checkResult('0.000');
+    input('5');
+    checkResult('0.0005');
 });
