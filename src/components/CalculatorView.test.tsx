@@ -274,3 +274,27 @@ test('0.000 should display as 0.000 during input 0.0005', () => {
     input('5');
     checkResult('0.0005');
 });
+
+test('1000 should be displayed with a space, like 1 000', () => {
+    render(<CalculatorView />);
+    input('1000');
+    checkResult('1 000');
+});
+
+test('1000000 should be displayed with spaces, like 1 000 000', () => {
+    render(<CalculatorView />);
+    input('1000000');
+    checkResult('1 000 000');
+});
+
+test('1000.0001 should be displayed as 1 000.0001', () => {
+    render(<CalculatorView />);
+    input('1000.0001');
+    checkResult('1 000.0001');
+});
+
+test('0.000001 should be displayed without spaces', () => {
+    render(<CalculatorView />);
+    input('0.000001');
+    checkResult('0.000001');
+});

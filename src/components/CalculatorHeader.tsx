@@ -4,6 +4,10 @@ import { createUseStyles } from 'react-jss';
 import { roundTo } from '../model/Calculator';
 import { $expression, $input } from '../model';
 
+const formatThousands = (x: number | string) => {
+    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ' ');
+};
+
 const InputValue: React.FC = () => {
     const input = useStore($input);
     const number = Number(input);
@@ -11,7 +15,7 @@ const InputValue: React.FC = () => {
         isNaN(number) || input.endsWith('.') || /^\d+.*0+$/.test(input)
             ? input
             : roundTo(number, 10);
-    return <>{value}</>;
+    return <>{formatThousands(value)}</>;
 };
 
 const ExpressionValue: React.FC = () => {
