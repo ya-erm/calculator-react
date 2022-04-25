@@ -1,6 +1,5 @@
 import { attach, createEffect, createEvent, createStore, guard, sample } from 'effector';
-import { EVENT_EMITTER } from '../hooks/useEvents';
-import { calculate, roundTo } from '../model/Calculator';
+import { calculate, roundTo } from './Calculator';
 
 export const $input = createStore('0');
 export const $expression = createStore('0');
@@ -16,8 +15,6 @@ const updateResult = createEvent<number | null>();
 $result.on(updateResult, (_, v) => v);
 
 export const keyPressed = createEvent<string>();
-
-EVENT_EMITTER.subscribe('key', (value: string) => keyPressed(value));
 
 const numberKeyPressed = createEvent<string>();
 const functionKeyPressed = createEvent<string>();

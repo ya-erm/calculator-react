@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { createUseStyles } from 'react-jss';
 import { ReactComponent as BackspaceIcon } from '../assets/icons/backspace.svg';
-import { EVENT_EMITTER } from '../hooks/useEvents';
+import { keyPressed } from '../model';
 import { ActionButton, BUTTON_FULL_SIZE } from './CalculatorButton';
 import CalculatorHeader from './CalculatorHeader';
 import CalculatorKeyboard from './CalculatorKeyboard';
@@ -17,10 +17,10 @@ const CalculatorView: React.FC<ICalculatorViewProps> = () => {
         document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
 
         // Keyboard input
-        window.addEventListener('keydown', (e: KeyboardEvent) => EVENT_EMITTER.emit('key', e.key));
+        window.addEventListener('keydown', (e: KeyboardEvent) => keyPressed(e.key));
 
         // Clear at render
-        EVENT_EMITTER.emit('key', 'Clear');
+        keyPressed('Clear');
     }, []);
 
     return (
@@ -32,7 +32,7 @@ const CalculatorView: React.FC<ICalculatorViewProps> = () => {
                         <ActionButton
                             text="Backspace"
                             icon={<BackspaceIcon />}
-                            onPress={() => EVENT_EMITTER.emit('key', 'Backspace')}
+                            onPress={() => keyPressed('Backspace')}
                         />
                     </div>
                 </div>

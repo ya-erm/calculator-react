@@ -6,7 +6,7 @@ import { ReactComponent as DivideIcon } from '../assets/icons/division.svg';
 import { ReactComponent as EqualsIcon } from '../assets/icons/equal.svg';
 import { ReactComponent as MinusIcon } from '../assets/icons/minus.svg';
 import { ReactComponent as PlusIcon } from '../assets/icons/plus.svg';
-import { EVENT_EMITTER } from '../hooks/useEvents';
+import { keyPressed } from '../model';
 import { ActionButton, CalculatorButton, IButtonProps } from './CalculatorButton';
 
 type ICalculatorKeyboardProps = {};
@@ -17,16 +17,12 @@ const Row: React.FC = ({ children }) => {
 };
 
 const CalculatorKeyboard: React.FC<ICalculatorKeyboardProps> = () => {
-    const onKeyPress = (key: string) => {
-        EVENT_EMITTER.emit('key', key);
-    };
-
     const NumberButton: React.FC<IButtonProps> = ({ text, type = 'number', ...other }) => (
-        <CalculatorButton text={text} type={type} onPress={() => onKeyPress(text)} {...other} />
+        <CalculatorButton text={text} type={type} onPress={() => keyPressed(text)} {...other} />
     );
 
     const FunctionButton: React.FC<IButtonProps> = ({ text, type = 'action', ...other }) => (
-        <CalculatorButton text={text} type={type} onPress={() => onKeyPress(text)} {...other} />
+        <CalculatorButton text={text} type={type} onPress={() => keyPressed(text)} {...other} />
     );
 
     const css = useStyle();
@@ -34,7 +30,7 @@ const CalculatorKeyboard: React.FC<ICalculatorKeyboardProps> = () => {
     return (
         <div className={css.container}>
             <Row>
-                <ActionButton text="C" icon={<TrashIcon />} onPress={() => onKeyPress('C')} />
+                <ActionButton text="C" icon={<TrashIcon />} onPress={() => keyPressed('C')} />
                 <NumberButton text="(" type="action" />
                 <NumberButton text=")" type="action" />
                 <FunctionButton text="/" icon={<DivideIcon />} />
@@ -60,7 +56,7 @@ const CalculatorKeyboard: React.FC<ICalculatorKeyboardProps> = () => {
             <Row>
                 <NumberButton text="0" columns={2} />
                 <NumberButton text="." />
-                <ActionButton text="=" onPress={() => onKeyPress('=')} icon={<EqualsIcon />} />
+                <ActionButton text="=" onPress={() => keyPressed('=')} icon={<EqualsIcon />} />
             </Row>
         </div>
     );

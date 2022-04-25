@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { keyPressed } from '../model';
 import CalculatorKeyboard from './CalculatorKeyboard';
-import { EVENT_EMITTER } from '../hooks/useEvents';
 
 const numbers = [...Array(10)].map((_, i) => `${i}`);
 const operators = ['/', '*', '+', '-'];
@@ -41,9 +41,9 @@ test('click to any button should emit key event', () => {
     allButtons.forEach((item) => {
         const button = screen.getByLabelText(item);
         let received: string | null = null;
-        const unsubscribe = EVENT_EMITTER.subscribe('key', (data: string) => {
-            received = data;
-            unsubscribe();
+        const subscription = keyPressed.watch((value) => {
+            received = value;
+            subscription.unsubscribe();
         });
         fireEvent.click(button);
         expect(received).toBe(item);

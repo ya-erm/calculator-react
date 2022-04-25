@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
-import { EVENT_EMITTER } from '../hooks/useEvents';
+import { keyPressed } from '../model';
 import { calculate, roundTo } from '../model/Calculator';
 
 type ICalculatorInputProps = {};
@@ -209,7 +209,8 @@ const CalculatorInput: React.FC<ICalculatorInputProps> = () => {
     );
 
     useEffect(() => {
-        return EVENT_EMITTER.subscribe('key', (key: string) => onKeyPress(key));
+        const subscription = keyPressed.watch((key) => onKeyPress(key));
+        return subscription.unsubscribe;
     }, [onKeyPress]);
 
     const css = useStyles();

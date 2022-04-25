@@ -2,7 +2,7 @@ import { useStore } from 'effector-react';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { roundTo } from '../model/Calculator';
-import { $expression, $input } from './model';
+import { $expression, $input } from '../model';
 
 const InputValue: React.FC = () => {
     const input = useStore($input);
