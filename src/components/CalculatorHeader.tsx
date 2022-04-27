@@ -5,7 +5,18 @@ import { roundTo } from '../model/Calculator';
 import { $expression, $input } from '../model';
 
 const formatThousands = (x: number | string) => {
-    return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ' ');
+    let [a, b] = x.toString().split('.');
+    const pattern = /(-?\d+)(\d{3})/;
+    while (pattern.test(a)) {
+        a = a.replace(pattern, '$1 $2');
+    }
+    if (b !== undefined) {
+        return [a, b].join('.');
+    }
+    if (x.toString().endsWith('.')) {
+        return `${a}.`;
+    }
+    return a;
 };
 
 const InputValue: React.FC = () => {
